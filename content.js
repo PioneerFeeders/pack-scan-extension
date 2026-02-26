@@ -287,4 +287,21 @@
   }
 
   console.log("[PackScan] Content script loaded on ShipStation (main world)");
+
+  // Expose test hook for debugging
+  window.__packScanTest = function() {
+    processShipStationResponse({
+      fulfillments: [{
+        fulfillmentId: "test-" + Date.now(),
+        fulfillmentPlanId: "fp-test",
+        trackingInformation: { trackingNumber: "1ZTEST" + Date.now() },
+        labelFulfillment: { carrierId: "ups" }
+      }],
+      salesOrders: [{
+        orderNumber: "TEST-9999",
+        fulfillmentPlanIds: ["fp-test"],
+        soldTo: { name: "Test Customer" }
+      }]
+    });
+  };
 })();
