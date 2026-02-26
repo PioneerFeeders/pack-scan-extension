@@ -224,14 +224,14 @@
   }
 
   function handleSuccessfulScan(fulfillment, employeeId, employeeName) {
-    // Send to API via background script
-    chrome.runtime.sendMessage({
-      type: "LOG_PACK_SCAN",
+    // Send to API via injector.js → background script
+    window.postMessage({
+      type: "PACKSCAN_LOG",
       trackingNumber: fulfillment.trackingNumber,
       employeeId: employeeId,
       fulfillmentId: fulfillment.fulfillmentId,
       orderNumber: fulfillment.orderNumber,
-    });
+    }, "*");
 
     // Show success state
     const card = document.getElementById("packscan-card");
@@ -286,16 +286,5 @@
     }
   }
 
-  // ============================================================
-  // LISTEN FOR MESSAGES FROM BACKGROUND SCRIPT
-  // ============================================================
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // Background can also trigger checks if needed
-    if (message.type === "CHECK_NEW_LABELS") {
-      // This is a backup trigger — the fetch interceptor is primary
-      sendResponse({ ok: true });
-    }
-  });
-
-  console.log("[PackScan] Content script loaded on ShipStation");
+  console.log("[PackScan] Content script loaded on ShipStation (main world)");
 })();
