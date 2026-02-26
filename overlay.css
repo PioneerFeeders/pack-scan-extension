@@ -128,14 +128,23 @@
   transition: color 0.2s ease;
 }
 
-/* Hidden input for barcode scanner */
+/* Input for barcode scanner — visible for now */
 #packscan-input {
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
-  opacity: 0;
-  width: 1px;
-  height: 1px;
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 8px;
+  border: 2px solid #D8DCDE;
+  border-radius: 8px;
+  font-size: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  outline: none;
+  box-sizing: border-box;
+}
+
+#packscan-input:focus {
+  border-color: #1F73B7;
+  box-shadow: 0 0 0 3px rgba(31, 115, 183, 0.2);
 }
 
 /* Skip hint */
