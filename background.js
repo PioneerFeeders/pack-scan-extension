@@ -1,7 +1,7 @@
 // background.js
 // Watches ShipStation network requests for new label creations
 
-const API_BASE = "https://dashboard-view-production.up.railway.app";
+const API_BASE = "https://web-production-9d744.up.railway.app";
 
 // Track known fulfillment IDs so we only trigger on NEW labels
 let knownFulfillmentIds = new Set();
