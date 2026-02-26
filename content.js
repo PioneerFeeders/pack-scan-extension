@@ -12,6 +12,17 @@
     PF004: "Alex",
   };
 
+  // Enabled state — controlled by clicking the extension icon
+  let enabled = false;
+
+  window.addEventListener("message", function(event) {
+    if (event.source !== window) return;
+    if (event.data?.type === "PACKSCAN_SET_ENABLED") {
+      enabled = event.data.enabled;
+      console.log("[PackScan] " + (enabled ? "ENABLED" : "DISABLED"));
+    }
+  });
+
   // ============================================================
   // FETCH INTERCEPTOR
   // ============================================================
@@ -77,6 +88,10 @@
 
     if (newOnes.length > 0) {
       console.log("[PackScan] New label(s) detected:", newOnes);
+      if (!enabled) {
+        console.log("[PackScan] Overlay disabled — skipping");
+        return;
+      }
       pendingQueue.push(...newOnes);
       if (!overlayActive) showNextOverlay();
     }
