@@ -116,8 +116,13 @@
     }
 
     if (e.key === "Enter") {
-      // Dispatch a new Enter keydown directly on the input
-      currentInput.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: false }));
+      // Handle Enter directly - process the badge code
+      var code = currentInput.value.trim().toUpperCase();
+      if (code && EMPLOYEES[code]) {
+        handleSuccess(code);
+      } else if (code) {
+        handleBadBadge();
+      }
       return;
     }
 
@@ -237,70 +242,62 @@
     // Focus
     setTimeout(function() { input.focus(); }, 50);
 
-    // Handle Enter on the input
-    input.addEventListener("input", function() {
-      // Auto-submit if it looks like a barcode scan (ends fast)
-      // Barcode scanners type very fast then usually send Enter
-    });
-
-    input.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        var code = input.value.trim().toUpperCase();
-        if (code && EMPLOYEES[code]) {
-          // Success!
-          window.postMessage({
-            type: "PACKSCAN_LOG",
-            trackingNumber: fulfillment.trackingNumber,
-            employeeId: code,
-            fulfillmentId: fulfillment.fulfillmentId,
-            orderNumber: fulfillment.orderNumber,
-          }, "*");
-
-          card.style.background = "#EDF8F4";
-          card.style.boxShadow = "0 20px 60px rgba(3,129,83,0.15), 0 0 0 2px #038153";
-          card.innerHTML = "";
-          var sc = document.createElement("div");
-          sc.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;";
-          var check = document.createElement("div");
-          check.style.cssText = "width:52px;height:52px;border-radius:50%;background:#038153;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;margin-bottom:8px;";
-          check.textContent = "\u2713";
-          var name = document.createElement("div");
-          name.style.cssText = "font-size:22px;font-weight:700;color:#038153;";
-          name.textContent = EMPLOYEES[code];
-          var onum = document.createElement("div");
-          onum.style.cssText = "font-size:13px;color:#68737D;";
-          onum.textContent = "#" + fulfillment.orderNumber;
-          sc.appendChild(check);
-          sc.appendChild(name);
-          sc.appendChild(onum);
-          card.appendChild(sc);
-
-          currentInput = null;
-          setTimeout(function() {
-            removeOverlay();
-            showNextOverlay();
-          }, 1200);
-
-        } else if (code) {
-          // Bad badge
-          scanArea.style.borderColor = "#CC3340";
-          scanArea.style.background = "rgba(204,51,64,0.05)";
-          scanText.textContent = "Badge not recognized \u2014 try again";
-          scanText.style.color = "#CC3340";
-          input.value = "";
-          setTimeout(function() {
-            scanArea.style.borderColor = "#D8DCDE";
-            scanArea.style.background = "#F8F9FA";
-            scanText.textContent = "Scan your badge";
-            scanText.style.color = "#2F3941";
-          }, 1500);
-        }
-      }
-    });
-
     // Click backdrop to refocus
     backdrop.addEventListener("click", function() { input.focus(); });
+  }
+
+  function handleSuccess(code) {
+    var fulfillment = currentFulfillment;
+    var card = document.getElementById("packscan-card");
+
+    window.postMessage({
+      type: "PACKSCAN_LOG",
+      trackingNumber: fulfillment.trackingNumber,
+      employeeId: code,
+      fulfillmentId: fulfillment.fulfillmentId,
+      orderNumber: fulfillment.orderNumber,
+    }, "*");
+
+    card.style.background = "#EDF8F4";
+    card.style.boxShadow = "0 20px 60px rgba(3,129,83,0.15), 0 0 0 2px #038153";
+    card.innerHTML = "";
+    var sc = document.createElement("div");
+    sc.style.cssText = "display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;";
+    var check = document.createElement("div");
+    check.style.cssText = "width:52px;height:52px;border-radius:50%;background:#038153;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;margin-bottom:8px;";
+    check.textContent = "\u2713";
+    var name = document.createElement("div");
+    name.style.cssText = "font-size:22px;font-weight:700;color:#038153;";
+    name.textContent = EMPLOYEES[code];
+    var onum = document.createElement("div");
+    onum.style.cssText = "font-size:13px;color:#68737D;";
+    onum.textContent = "#" + fulfillment.orderNumber;
+    sc.appendChild(check);
+    sc.appendChild(name);
+    sc.appendChild(onum);
+    card.appendChild(sc);
+
+    currentInput = null;
+    setTimeout(function() {
+      removeOverlay();
+      showNextOverlay();
+    }, 1200);
+  }
+
+  function handleBadBadge() {
+    var scanArea = document.getElementById("packscan-scan-area");
+    var scanText = document.getElementById("packscan-scan-text");
+    scanArea.style.borderColor = "#CC3340";
+    scanArea.style.background = "rgba(204,51,64,0.05)";
+    scanText.textContent = "Badge not recognized \u2014 try again";
+    scanText.style.color = "#CC3340";
+    currentInput.value = "";
+    setTimeout(function() {
+      scanArea.style.borderColor = "#D8DCDE";
+      scanArea.style.background = "#F8F9FA";
+      scanText.textContent = "Scan your badge";
+      scanText.style.color = "#2F3941";
+    }, 1500);
   }
 
   function removeOverlay() {
