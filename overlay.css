@@ -1,0 +1,191 @@
+/* overlay.css — PackScan overlay styles */
+/* Scoped with #packscan- prefix to avoid conflicts with ShipStation */
+
+#packscan-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+#packscan-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+#packscan-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 28px 32px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  animation: packscan-slideIn 0.2s ease-out;
+}
+
+#packscan-card.packscan-card-success {
+  background: #EDF8F4;
+  box-shadow: 0 20px 60px rgba(3, 129, 83, 0.15), 0 0 0 2px #038153;
+}
+
+@keyframes packscan-slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Header */
+#packscan-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+#packscan-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1F73B7;
+  box-shadow: 0 0 0 3px rgba(31, 115, 183, 0.2);
+  animation: packscan-pulse 2s infinite;
+}
+
+@keyframes packscan-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(31, 115, 183, 0.2); }
+  50% { box-shadow: 0 0 0 6px rgba(31, 115, 183, 0.1); }
+}
+
+#packscan-header-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1F73B7;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Order info */
+#packscan-order-info {
+  margin-bottom: 24px;
+}
+
+#packscan-order-number {
+  font-size: 26px;
+  font-weight: 700;
+  color: #2F3941;
+  letter-spacing: -0.03em;
+}
+
+#packscan-customer {
+  font-size: 13px;
+  color: #68737D;
+  margin-top: 4px;
+}
+
+#packscan-tracking {
+  font-size: 11px;
+  font-family: monospace;
+  color: #87929D;
+  margin-top: 4px;
+}
+
+/* Scan area */
+#packscan-scan-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  background: #F8F9FA;
+  border-radius: 10px;
+  border: 2px dashed #D8DCDE;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+#packscan-scan-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2F3941;
+  transition: color 0.2s ease;
+}
+
+/* Hidden input for barcode scanner */
+#packscan-input {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+/* Skip hint */
+#packscan-skip {
+  font-size: 11px;
+  color: #C2C8CC;
+  margin-top: 8px;
+}
+
+#packscan-skip kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  background: #F0F1F2;
+  border: 1px solid #D8DCDE;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 10px;
+  color: #87929D;
+}
+
+/* Success state */
+#packscan-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+#packscan-success-check {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #038153;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+#packscan-success-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #038153;
+}
+
+#packscan-success-order {
+  font-size: 13px;
+  color: #68737D;
+}

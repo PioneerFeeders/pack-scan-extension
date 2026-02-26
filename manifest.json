@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Pioneer Feeders Pack Scan",
+  "version": "1.0.0",
+  "description": "Badge scan overlay for packer attribution after ShipStation label creation",
+  "permissions": [
+    "webRequest",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.shipstation.com/*",
+    "https://supportbase-app-production.up.railway.app/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.shipstation.com/*"],
+      "js": ["content.js"],
+      "css": ["overlay.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
