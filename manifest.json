@@ -9,7 +9,7 @@
   ],
   "host_permissions": [
     "*://*.shipstation.com/*",
-    "https://supportbase-app-production.up.railway.app/*"
+    "https://dashboard-view-production.up.railway.app/*"
   ],
   "background": {
     "service_worker": "background.js"

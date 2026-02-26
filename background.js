@@ -1,7 +1,7 @@
 // background.js
 // Watches ShipStation network requests for new label creations
 
-const API_BASE = "https://supportbase-app-production.up.railway.app";
+const API_BASE = "https://dashboard-view-production.up.railway.app";
 
 // Track known fulfillment IDs so we only trigger on NEW labels
 let knownFulfillmentIds = new Set();
@@ -57,7 +57,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.type === "LOG_PACK_SCAN") {
     // Forward the scan to the API
-    fetch(`${API_BASE}/api/pack-log`, {
+    fetch(`${API_BASE}/pack-scan`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
