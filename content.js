@@ -107,28 +107,43 @@
     // Stop ShipStation from seeing ANY keystrokes while overlay is open
     e.stopImmediatePropagation();
     e.stopPropagation();
+    e.preventDefault();
 
     if (e.key === "Escape") {
-      e.preventDefault();
       removeOverlay();
       showNextOverlay();
       return;
     }
 
-    // Let the input handle the keystroke naturally
-    // (focus should be on the input, so it types there)
-  }, true); // <-- capture: true is the key
+    if (e.key === "Enter") {
+      // Dispatch a new Enter keydown directly on the input
+      currentInput.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: false }));
+      return;
+    }
+
+    if (e.key === "Backspace") {
+      currentInput.value = currentInput.value.slice(0, -1);
+      return;
+    }
+
+    // Only type printable characters (single char keys)
+    if (e.key.length === 1) {
+      currentInput.value += e.key;
+    }
+  }, true);
 
   window.addEventListener("keyup", function(e) {
     if (!overlayActive) return;
     e.stopImmediatePropagation();
     e.stopPropagation();
+    e.preventDefault();
   }, true);
 
   window.addEventListener("keypress", function(e) {
     if (!overlayActive) return;
     e.stopImmediatePropagation();
     e.stopPropagation();
+    e.preventDefault();
   }, true);
 
   function showNextOverlay() {
